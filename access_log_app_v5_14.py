@@ -37,7 +37,7 @@ st.title("🔍 Access Control Log Analyzer")
 uploaded_file = st.file_uploader("📂 Upload Access Log (.xls or .xlsx)", type=["xls", "xlsx"])
 
 if uploaded_file:
-    df = pd.read_excel(uploaded_file)
+    df = pd.read_excel(uploaded_file, engine='openpyxl')
     df.columns = [col.strip() for col in df.columns]
     df['Time'] = pd.to_datetime(df['Time'], format='%d/%m/%Y %H:%M:%S')
     df['Date'] = df['Time'].dt.date
