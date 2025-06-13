@@ -3,7 +3,6 @@ import pandas as pd
 import plotly.express as px
 from datetime import datetime, timedelta
 from fpdf import FPDF
-from io import BytesIO
 
 st.set_page_config(page_title="Access Control Analyzer", layout="wide")
 
@@ -42,7 +41,7 @@ def generate_pdf_from_df(dataframe, title):
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=10)
-    pdf.multi_cell(0, 10, title, align='C')
+    pdf.cell(0, 10, title, ln=True, align='C')
     pdf.ln(5)
 
     col_width = 190 // len(dataframe.columns)
@@ -57,10 +56,7 @@ def generate_pdf_from_df(dataframe, title):
             pdf.cell(col_width, row_height, str(item), border=1)
         pdf.ln(row_height)
 
-    buffer = BytesIO()
-    pdf.output(buffer)
-    buffer.seek(0)
-    return buffer
+    return pdf.output(dest='S').encode('latin1')
 
 if uploaded_file:
     df = pd.read_excel(uploaded_file, engine='xlrd')
